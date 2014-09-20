@@ -21,6 +21,7 @@
   "license": "BSD",
   "devDependencies": {
     "async": "^0.9.0",
+    "jshint": "^2.5.5",
     "mocha": "^1.21.4",
     "pliers": "^1.0.2",
     "rimraf": "^2.2.8",
