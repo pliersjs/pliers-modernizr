@@ -4,8 +4,13 @@
   "description": "Build a modular Modernizr file using a custom config",
   "author": "Jack Brewer",
   "main": "pliers-modernizr.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pliersjs/pliers-modernizr.git"
+  },
   "scripts": {
-    "test": "mocha -r should test"
+    "test": "npm run lint && mocha -r should test",
+    "lint": "jshint ."
   },
   "publishConfig": {
     "registry": "http://registry.npmjs.org"
@@ -13,6 +18,7 @@
   "dependencies": {
     "modernizr": "git://github.com/Modernizr/Modernizr.git#master"
   },
+  "license": "BSD",
   "devDependencies": {
     "async": "^0.9.0",
     "mocha": "^1.21.4",
