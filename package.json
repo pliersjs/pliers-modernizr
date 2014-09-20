@@ -1,0 +1,23 @@
+{
+  "name": "pliers-modernizr",
+  "version": "0.0.1",
+  "description": "Build a modular Modernizr file using a custom config",
+  "author": "Jack Brewer",
+  "main": "pliers-modernizr.js",
+  "scripts": {
+    "test": "mocha -r should test"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org"
+  },
+  "dependencies": {
+    "modernizr": "git://github.com/Modernizr/Modernizr.git#master"
+  },
+  "devDependencies": {
+    "async": "^0.9.0",
+    "mocha": "^1.21.4",
+    "pliers": "^1.0.2",
+    "rimraf": "^2.2.8",
+    "should": "^4.0.4"
+  }
+}
