@@ -45,24 +45,56 @@ describe('pliers buildModernizr', function () {
 
   })
 
-  it('should error with no config file supplied', function (done) {
-
-    var pliers = createPliers()
-    pliersModernizr(pliers, join(pliers.cwd, 'js'))
-
-    pliers.run('buildModernizr', function () {
-      assert.throws()
-      done()
-    })
-
+  it('should error with no pliers argument supplied', function () {
+    assert.throws(
+      function() {
+        var pliers = createPliers()
+        pliersModernizr()
+        pliers.run('buildModernizr')
+      }
+      , 'No pliers argument supplied.'
+    )
   })
 
-  // it('should error with no path supplied', function (done) {
-  //   done()
+  it('should error if pliers version can not be detected', function () {
+    assert.throws(
+      function() {
+        var pliers = createPliers()
+        pliersModernizr()
+        pliers.run('buildModernizr')
+      }
+      , 'You need pliers >=0.3.4 to use this plugin'
+    )
+  })
+
+  it('should error with no directory path argument supplied', function () {
+    assert.throws(
+      function() {
+        var pliers = createPliers()
+        pliersModernizr(pliers)
+        pliers.run('buildModernizr')
+      }
+      , 'No directory path argument supplied.'
+    )
+  })
+
+  // it('should error with no config file supplied', function () {
+  //   var pliers = createPliers()
+  //   pliersModernizr(pliers, join(pliers.cwd, 'js'))
+  //   pliers.run('buildModernizr', function(err) {
+  //     assert.throws(err)
+  //   })
   // })
 
   // it('should error if file could not be created', function (done) {
-  //   done()
+  //   this.timeout(5000)
+  //   var pliers = createPliers()
+  //   fs.writeFileSync(join(pliers.cwd, 'modernizr.json'), '{}')
+  //   pliersModernizr(pliers, join(pliers.cwd, 'js'))
+  //   pliers.run('buildModernizr', function(err) {
+  //     assert.throws(err, 'Hello')
+  //     done()
+  //   })
   // })
 
   afterEach(function (done) {

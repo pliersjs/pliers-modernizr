@@ -3,29 +3,29 @@ var modernizr = require('modernizr')
   , path = require('path')
   , join = path.join
 
-module.exports = function (pliers, path) {
+module.exports = function (pliers, dirPath) {
+
+  // Check supplied arguments
+  if (!pliers) throw new Error('No pliers argument supplied.')
+  if (!pliers.version) throw new Error('You need pliers >=0.3.4 to use this plugin')
+  if (!dirPath) throw new Error('No directory path argument supplied.')
 
   pliers('buildModernizr', function (done) {
 
     fs.readFile(join(pliers.cwd, 'modernizr.json'), function(err, configFile) {
-      if (err) {
-        pliers.logger.error('No “modernizr.json” config file found.')
-        return done(err)
-      }
+      if (err) return done(err)
 
       var config = JSON.parse(configFile)
 
-      if (!config.verbose) config.verbose = false
+      if (!config.verbose)
+        config.verbose = false
 
       modernizr.build(config, function(result) {
         var file = 'modernizr.js'
           , js = result.min
 
-        fs.writeFile(join(path, file), js, 'utf-8', function (err) {
-          if (err) {
-            pliers.logger.error('Could not write ' + file + ' to ' + path)
-            return done(err)
-          }
+        fs.writeFile(join(dirPath, file), js, 'utf-8', function (err) {
+          if (err) return done(err)
 
           pliers.logger.info('Successfully generated ' + file)
           done()
