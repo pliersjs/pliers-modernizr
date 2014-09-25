@@ -10,9 +10,19 @@ Build a modular Modernizr file using a custom config
 
 ## Usage
 
-`pliersModernizr(pliers, path)`
+```
+var pliersModernizr = require('pliers-modernizr')
+
+pliersModernizr(pliers, path)
+```
 
 `path` should be the directory where a `modernizr.js` file will be built.
+
+The from CLI:
+
+```
+pliers buildModernizr
+```
 
 A `modernizr.json` must exist in the pliers current working directory. This
 should contain all the options required for building a custom Modernizr file.
