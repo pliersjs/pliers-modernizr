@@ -1,6 +1,6 @@
 {
   "name": "pliers-modernizr",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Build a modular Modernizr file using a custom config",
   "author": "Jack Brewer",
   "main": "pliers-modernizr.js",
