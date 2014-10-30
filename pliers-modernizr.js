@@ -10,7 +10,7 @@ module.exports = function (pliers, dirPath) {
   if (!pliers.version) throw new Error('You need pliers >=0.3.4 to use this plugin')
   if (!dirPath) throw new Error('No directory path argument supplied.')
 
-  pliers('buildModernizr', function (done) {
+  return function (done) {
 
     fs.readFile(join(pliers.cwd, 'modernizr.json'), function(err, configFile) {
       if (err) return done(err)
@@ -33,6 +33,6 @@ module.exports = function (pliers, dirPath) {
       })
 
     })
-  })
+  }
 
 }

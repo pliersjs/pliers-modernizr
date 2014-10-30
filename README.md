@@ -1,28 +1,32 @@
 # pliers-modernizr
 
-Build a modular Modernizr file using a custom config
+Build a modular Modernizr file using a custom config.
 
 [![build status](https://secure.travis-ci.org/pliersjs/pliers-modernizr.png)](http://travis-ci.org/pliersjs/pliers-modernizr)
 
 ## Installation
 
-    npm install pliers-modernizr
+```
+npm install pliers-modernizr --save
+```
 
 ## Usage
 
+Within a `pliers.js` file:
+
 ```
-var pliersModernizr = require('pliers-modernizr')
-
-pliersModernizr(pliers, path)
+module.exports = function(pliers) {
+  pliers('buildModernizr', require('pliers-modernizr')(pliers, 'path'))
+}
 ```
 
-`path` should be the directory where a `modernizr.js` file will be built.
-
-The from CLI:
+Then from the CLI:
 
 ```
 pliers buildModernizr
 ```
+
+`path` should be the directory where a `modernizr.js` file will be built.
 
 A `modernizr.json` must exist in the pliers current working directory. This
 should contain all the options required for building a custom Modernizr file.
