@@ -27,7 +27,7 @@ describe('pliers buildModernizr', function () {
   })
 
   it('should build a Modernizr file using a config file', function (done) {
-    this.timeout(5000)
+    this.timeout(10000)
 
     var pliers = createPliers()
 
