@@ -20,9 +20,12 @@ module.exports = function (pliers, dirPath) {
       if (!config.verbose)
         config.verbose = false
 
+      pliers.logger.info('Any following Grunt errors can be ignored until Modernizr 3.0 moves to npm.')
       modernizr.build(config, function(result) {
         var file = 'modernizr.js'
           , js = result.min
+
+        pliers.mkdirp(dirPath)
 
         fs.writeFile(join(dirPath, file), js, 'utf-8', function (err) {
           if (err) return done(err)
