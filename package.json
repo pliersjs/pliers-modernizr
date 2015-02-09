@@ -16,7 +16,7 @@
     "registry": "http://registry.npmjs.org"
   },
   "dependencies": {
-    "modernizr": "git://github.com/Modernizr/Modernizr.git#master"
+    "modernizr": "git://github.com/Modernizr/Modernizr.git#a4e41038d850572bc1b02d2fbe1bbffb7b01dbd4"
   },
   "license": "BSD",
   "devDependencies": {
