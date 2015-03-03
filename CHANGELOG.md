@@ -1,3 +1,8 @@
+0.2.1 / 2015-03-03
+==================
+
+  * Updating README to include a brief note about custom config files
+
 0.2.0 / 2015-03-03
 ==================
 

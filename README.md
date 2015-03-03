@@ -28,8 +28,9 @@ pliers buildModernizr
 
 `path` should be the directory where a `modernizr.js` file will be built.
 
-A `modernizr.json` must exist in the pliers current working directory. This
+A `modernizr.json` should exist in the pliers current working directory. This
 should contain all the options required for building a custom Modernizr file.
+Alternatively, a path to a custom config file can be passed as a third argument.
 
 Reference: [https://github.com/Modernizr/Modernizr/blob/master/lib/config-all.json](https://github.com/Modernizr/Modernizr/blob/master/lib/config-all.json)
 
@@ -58,7 +59,7 @@ should be gone. For now they can be safely ignored.
 ## Credits
 [Jack Brewer](https://github.com/jackbrewer)
 
-[Pedro Velentim](https://github.com/pvalentim)
+[Pedro Valentim](https://github.com/pvalentim)
 
 ## Licence
 Licensed under the [New BSD License](http://opensource.org/licenses/bsd-license.php)
