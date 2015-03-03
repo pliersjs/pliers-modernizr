@@ -2,6 +2,7 @@ var modernizr = require('modernizr')
   , fs = require('fs')
   , path = require('path')
   , join = path.join
+  , UglifyJS = require('uglify-js')
 
 module.exports = function (pliers, dirPath) {
 
@@ -22,12 +23,24 @@ module.exports = function (pliers, dirPath) {
 
       pliers.logger.info('Any following Grunt errors can be ignored until Modernizr 3.0 moves to npm.')
       modernizr.build(config, function(result) {
+
         var file = 'modernizr.js'
-          , js = result.min
+          , ast = UglifyJS.parse(result)
+          , compressor = UglifyJS.Compressor()
+          , output = UglifyJS.OutputStream()
+
+        // jshint camelcase: false
+        ast.figure_out_scope()
+
+        var compressedAst = ast.transform(compressor)
+        compressedAst.figure_out_scope()
+        compressedAst.compute_char_frequency()
+        compressedAst.mangle_names()
+        compressedAst.print(output)
 
         pliers.mkdirp(dirPath)
 
-        fs.writeFile(join(dirPath, file), js, 'utf-8', function (err) {
+        fs.writeFile(join(dirPath, file), output.toString(), 'utf-8', function (err) {
           if (err) return done(err)
 
           pliers.logger.info('Successfully generated ' + file)

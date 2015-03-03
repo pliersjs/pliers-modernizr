@@ -30,8 +30,19 @@ describe('pliers buildModernizr', function () {
     this.timeout(10000)
 
     var pliers = createPliers()
+      , config =
+          { 'options':
+            [ 'setClasses'
+            , 'testProp'
+            ]
+          , 'feature-detects':
+            [ 'svg'
+            , 'css/transforms3d'
+            , 'touchevents'
+          ]
+        }
 
-    fs.writeFileSync(join(pliers.cwd, 'modernizr.json'), '{}')
+    fs.writeFileSync(join(pliers.cwd, 'modernizr.json'),  JSON.stringify(config))
     fs.mkdirSync(join(pliers.cwd, 'js'))
 
     buildModernizr(pliers, join(pliers.cwd, 'js'))(function () {
