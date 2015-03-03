@@ -7,7 +7,6 @@ module.exports = function (pliers, dirPath, configPath) {
 
   // Check supplied arguments
   if (!pliers) throw new Error('No pliers argument supplied.')
-  if (!pliers.version) throw new Error('You need pliers >=0.3.4 to use this plugin')
   if (!dirPath) throw new Error('No directory path argument supplied.')
 
   if (!configPath) {

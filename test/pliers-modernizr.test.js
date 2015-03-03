@@ -77,16 +77,6 @@ describe('pliers buildModernizr', function () {
     )
   })
 
-  it('should error if pliers version can not be detected', function () {
-    assert.throws(
-      function() {
-        var pliers
-        buildModernizr(pliers)
-      }
-      , 'You need pliers >=0.3.4 to use this plugin'
-    )
-  })
-
   it('should error with no directory path argument supplied', function () {
     assert.throws(
       function() {
