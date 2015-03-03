@@ -31,10 +31,34 @@ describe('pliers buildModernizr', function () {
 
     var pliers = createPliers()
 
-    fs.writeFileSync(join(pliers.cwd, 'modernizr.json'), '{}')
+    fs.writeFileSync(join(pliers.cwd, 'modernizr.json'), '{ "feature-detects": ["test/svg"]}')
     fs.mkdirSync(join(pliers.cwd, 'js'))
 
-    buildModernizr(pliers, join(pliers.cwd, 'js'))(function () {
+    var destDir = join(pliers.cwd, 'js')
+
+    buildModernizr(pliers, destDir)(function () {
+      fs.readFile(join(pliers.cwd, 'js', 'modernizr.js'), function (err, data) {
+        assert(!err)
+        assert(data.length > 1)
+        done()
+      })
+    })
+
+  })
+
+  it('should build a Modernizr file using a config file with custom path', function (done) {
+    this.timeout(10000)
+
+    var pliers = createPliers()
+
+    fs.mkdirSync(join(pliers.cwd, 'foo'))
+    fs.writeFileSync(join(pliers.cwd, 'foo/modernizr.json'), '{ "feature-detects": ["test/svg"]}')
+    fs.mkdirSync(join(pliers.cwd, 'js'))
+
+    var destDir = join(pliers.cwd, 'js')
+      , configPath = join(pliers.cwd, 'foo/modernizr.json')
+
+    buildModernizr(pliers, destDir, configPath)(function () {
       fs.readFile(join(pliers.cwd, 'js', 'modernizr.js'), function (err, data) {
         assert(!err)
         assert(data.length > 1)
@@ -77,13 +101,11 @@ describe('pliers buildModernizr', function () {
 
   //   var pliers = createPliers()
 
-  //   fs.writeFileSync(join(pliers.cwd, 'modernizr.json'), '{}')
   //   fs.mkdirSync(join(pliers.cwd, 'js'))
 
   //   buildModernizr(pliers, join(pliers.cwd, 'js'))(function () {
   //     fs.readFile(join(pliers.cwd, 'js', 'modernizr.js'), function (err, data) {
   //       assert(err)
-  //       console.log(data)
   //     })
   //   })
 

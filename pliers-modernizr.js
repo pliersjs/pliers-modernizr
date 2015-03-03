@@ -3,16 +3,20 @@ var modernizr = require('modernizr')
   , path = require('path')
   , join = path.join
 
-module.exports = function (pliers, dirPath) {
+module.exports = function (pliers, dirPath, configPath) {
 
   // Check supplied arguments
   if (!pliers) throw new Error('No pliers argument supplied.')
   if (!pliers.version) throw new Error('You need pliers >=0.3.4 to use this plugin')
   if (!dirPath) throw new Error('No directory path argument supplied.')
 
+  if (!configPath) {
+    configPath = pliers.cwd + '/modernizr.json'
+  }
+
   return function (done) {
 
-    fs.readFile(join(pliers.cwd, 'modernizr.json'), function(err, configFile) {
+    fs.readFile(configPath, function(err, configFile) {
       if (err) return done(err)
 
       var config = JSON.parse(configFile)
