@@ -1,4 +1,4 @@
-# pliers-modernizr
+# [pliers](https://pliersjs.github.io/)-modernizr
 
 Build a modular Modernizr file using a custom config.
 
