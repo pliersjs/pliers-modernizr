@@ -2,6 +2,7 @@ var modernizr = require('modernizr')
   , fs = require('fs')
   , path = require('path')
   , join = path.join
+  , uglify = require('uglify-js')
 
 module.exports = function (pliers, dirPath, configPath) {
 
@@ -16,29 +17,25 @@ module.exports = function (pliers, dirPath, configPath) {
   return function (done) {
 
     fs.readFile(configPath, function(err, configFile) {
-      if (err) return done(err)
+      if (err) return done(new Error('Modernizr config file not found.'))
 
       var config = JSON.parse(configFile)
 
-      if (!config.verbose)
-        config.verbose = false
-
-      pliers.logger.info('Any following Grunt errors can be ignored until Modernizr 3.0 moves to npm.')
       modernizr.build(config, function(result) {
+
         var file = 'modernizr.js'
-          , js = result.min
+          , resultMinified = uglify.minify(result, { fromString: true })
 
         pliers.mkdirp(dirPath)
 
-        fs.writeFile(join(dirPath, file), js, 'utf-8', function (err) {
-          if (err) return done(err)
+        fs.writeFile(join(dirPath, file), resultMinified.code, 'utf-8', function (err) {
+          if (err) done(new Error('Compiled Modernizr file could not be written.'))
 
-          pliers.logger.info('Successfully generated ' + file)
+          pliers.logger.info('Successfully built ' + file)
           done()
         })
-      })
 
+      })
     })
   }
-
 }

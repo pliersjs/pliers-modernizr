@@ -1,119 +1,100 @@
 var join = require('path').join
   , fs = require('fs')
   , assert = require('assert')
-  , createPliers = require('pliers').bind(null, { cwd: __dirname + '/output', logLevel: 'error' })
-  , buildModernizr = require('..')
-  , rimraf = require('rimraf')
-  , async = require('async')
+  , createPliers = require('pliers').bind(null, { cwd: __dirname + '/tmp', logLevel: 'fatal' })
+  , buildModernizr = require('../pliers-modernizr')
+  , rmdir = require('rimraf')
+  , mkdir = require('mkdirp')
+  // , async = require('async')
+  , tempDir = join(__dirname, 'tmp')
 
-describe('pliers buildModernizr', function () {
+describe('pliers-modernizr', function () {
 
-  beforeEach(function (done) {
-    async.waterfall(
-      [ function (cb) {
-          fs.exists(join(__dirname, 'output'), function (exists) {
-            cb(null, exists)
-          })
-        }
-      , function (exists, cb) {
-          if (!exists) return cb(null)
-          rimraf(join(__dirname, 'output'), cb)
-        }
-      ]
-      , function () {
-        fs.mkdir(join(__dirname, 'output'), done)
-      }
-    )
-  })
-
-  it('should build a Modernizr file using a config file', function (done) {
-    this.timeout(10000)
-
-    var pliers = createPliers()
-
-    fs.writeFileSync(join(pliers.cwd, 'modernizr.json'), '{ "feature-detects": ["test/svg"]}')
-    fs.mkdirSync(join(pliers.cwd, 'js'))
-
-    var destDir = join(pliers.cwd, 'js')
-
-    buildModernizr(pliers, destDir)(function () {
-      fs.readFile(join(pliers.cwd, 'js', 'modernizr.js'), function (err, data) {
-        assert(!err)
-        assert(data.length > 1)
+  beforeEach('create temp directory', function (done) {
+    rmdir(tempDir, function () {
+      mkdir(tempDir, function() {
         done()
       })
     })
-
   })
-
-  it('should build a Modernizr file using a config file with custom path', function (done) {
-    this.timeout(10000)
-
-    var pliers = createPliers()
-
-    fs.mkdirSync(join(pliers.cwd, 'foo'))
-    fs.writeFileSync(join(pliers.cwd, 'foo/modernizr.json'), '{ "feature-detects": ["test/svg"]}')
-    fs.mkdirSync(join(pliers.cwd, 'js'))
-
-    var destDir = join(pliers.cwd, 'js')
-      , configPath = join(pliers.cwd, 'foo/modernizr.json')
-
-    buildModernizr(pliers, destDir, configPath)(function () {
-      fs.readFile(join(pliers.cwd, 'js', 'modernizr.js'), function (err, data) {
-        assert(!err)
-        assert(data.length > 1)
-        done()
-      })
-    })
-
-  })
-
-  it('should error with no pliers argument supplied', function () {
-    assert.throws(
-      function() {
-        buildModernizr()
-      }
-      , 'No pliers argument supplied.'
-    )
-  })
-
-  it('should error with no directory path argument supplied', function () {
-    assert.throws(
-      function() {
-        var pliers = createPliers()
-        buildModernizr(pliers)
-      }
-      , 'No directory path argument supplied.'
-    )
-  })
-
-  // it('should error with no config file supplied', function () {
-
-  //   var pliers = createPliers()
-
-  //   fs.mkdirSync(join(pliers.cwd, 'js'))
-
-  //   buildModernizr(pliers, join(pliers.cwd, 'js'))(function () {
-  //     fs.readFile(join(pliers.cwd, 'js', 'modernizr.js'), function (err, data) {
-  //       assert(err)
-  //     })
-  //   })
-
-  // })
-
-  // it('should error if file could not be created', function (done) {
-  //   this.timeout(5000)
-  //   var pliers = createPliers()
-  //   fs.writeFileSync(join(__dirname, 'modernizr.json'), '{}')
-  //   buildModernizr(pliers, join(__dirname, 'js'))
-  //   pliers.run('buildModernizr', function(err) {
-  //     assert.throws(err, 'Hello')
-  //     done()
-  //   })
-  // })
 
   afterEach(function (done) {
-    rimraf(join(__dirname, 'output'), done)
+    rmdir(tempDir, done)
+  })
+
+  it('should error with no pliers argument supplied', function (done) {
+    assert.throws(function() {
+      buildModernizr()
+    }, /No pliers argument supplied./)
+    done()
+  })
+
+  it('should error with no directory path argument supplied', function (done) {
+    var pliers = createPliers()
+    assert.throws(function() {
+      pliers('buildSprite', buildModernizr(pliers))
+    }, /No directory path argument supplied./)
+    done()
+  })
+
+  it('should build using a config file in the default location', function (done) {
+
+    var pliers = createPliers()
+      , destDir = join(tempDir, 'js')
+
+    fs.writeFileSync(join(tempDir, 'modernizr.json'), '{ "feature-detects": [ "test/svg" ] }')
+    fs.mkdirSync(destDir)
+
+    pliers('buildModernizr', buildModernizr(pliers, destDir))
+    pliers.run('buildModernizr', function (error) {
+      if (error) return done(error)
+
+      fs.readFile(join(destDir, 'modernizr.js'), function (error) {
+        assert.equal(error, null, 'File does not exist: modernizr.js')
+        done()
+      })
+    })
+
+  })
+
+  it('should build using a config file in a custom location', function (done) {
+
+    var pliers = createPliers()
+      , destDir = join(tempDir, 'js')
+      , configDir = join(tempDir, 'foo')
+      , configPath = join(configDir, 'modernizr.json')
+
+    fs.mkdirSync(configDir)
+    fs.writeFileSync(configPath, '{ "feature-detects": ["test/svg"]}')
+
+    fs.mkdirSync(destDir)
+
+    pliers('buildModernizr', buildModernizr(pliers, destDir, configPath))
+    pliers.run('buildModernizr', function (error) {
+      if (error) return done(error)
+
+      fs.readFile(join(destDir, 'modernizr.js'), function (err, data) {
+        assert(!err)
+        assert(data.length > 1)
+        done()
+      })
+    })
+
+  })
+
+  it('should error with no config file found', function (done) {
+
+    var pliers = createPliers()
+      , destDir = join(tempDir, 'js')
+
+    fs.mkdirSync(destDir)
+
+    pliers('buildModernizr', buildModernizr(pliers, destDir, 'fake/config/path'))
+    pliers.run('buildModernizr', function (error) {
+      assert.equal(error.message, 'Modernizr config file not found.')
+      done()
+    })
+
   })
 
 })
