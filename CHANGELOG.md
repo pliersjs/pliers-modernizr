@@ -1,3 +1,12 @@
+1.0.0 / 2015-09-25
+==================
+
+  * Optimised to work with official Modernizr 3.0 release
+  * Adds custom minification using UglifyJS
+  * Adds coverage reporting
+  * Better error reporting
+  * Updated tests
+
 0.2.1 / 2015-03-03
 ==================
 
