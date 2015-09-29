@@ -1,6 +1,6 @@
 {
   "name": "pliers-modernizr",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Use Pliers to build a modular Modernizr file using a custom config",
   "author": "Jack Brewer",
   "license": "ISC",
