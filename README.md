@@ -54,4 +54,4 @@ Example:
 Modernizr changed the format of their config `feature-detects`, so if upgrading an existing project you will likely need to [match the new naming convention](https://github.com/Modernizr/Modernizr/blob/master/lib/config-all.json) (for example, from `test/css/mediaqueries` to `css/mediaqueries`)
 
 ## Licence
-Licensed under the [New BSD License](http://opensource.org/licenses/bsd-license.php)
+ISC

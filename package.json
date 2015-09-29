@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Use Pliers to build a modular Modernizr file using a custom config",
   "author": "Jack Brewer",
-  "license": "BSD",
+  "license": "ISC",
   "repository": {
     "type": "git",
     "url": "https://github.com/pliersjs/pliers-modernizr.git"
