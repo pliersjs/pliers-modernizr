@@ -1,3 +1,10 @@
+1.1.0 / 2015-09-29
+==================
+
+  * Adds ESJint and jsinspect, removes JSHint and JSCS
+  * Updates license to ISC
+  * Additional test to mock failed Modernizr build
+
 1.0.0 / 2015-09-25
 ==================
 
