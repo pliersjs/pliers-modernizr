@@ -16,12 +16,12 @@ module.exports = function (pliers, dirPath, configPath) {
 
   return function (done) {
 
-    fs.readFile(configPath, function(err, configFile) {
+    fs.readFile(configPath, function (err, configFile) {
       if (err) return done(new Error('Modernizr config file not found.'))
 
       var config = JSON.parse(configFile)
 
-      modernizr.build(config, function(result) {
+      modernizr.build(config, function (result) {
 
         var file = 'modernizr.js'
           , resultMinified = uglify.minify(result, { fromString: true })
@@ -29,7 +29,7 @@ module.exports = function (pliers, dirPath, configPath) {
         pliers.mkdirp(dirPath)
 
         fs.writeFile(join(dirPath, file), resultMinified.code, 'utf-8', function (err) {
-          if (err) done(new Error('Compiled Modernizr file could not be written.'))
+          if (err) return done(err)
 
           pliers.logger.info('Successfully built ' + file)
           done()

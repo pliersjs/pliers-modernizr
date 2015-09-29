@@ -1,18 +1,18 @@
 var join = require('path').join
   , fs = require('fs')
   , assert = require('assert')
-  , createPliers = require('pliers').bind(null, { cwd: __dirname + '/tmp', logLevel: 'fatal' })
-  , buildModernizr = require('../pliers-modernizr')
+  , rewire = require('rewire')
+  , buildModernizr = rewire('../pliers-modernizr')
   , rmdir = require('rimraf')
   , mkdir = require('mkdirp')
-  // , async = require('async')
-  , tempDir = join(__dirname, 'tmp')
+  , tempDir = join(__dirname, 'temp')
+  , createPliers = require('pliers').bind(null, { cwd: tempDir, logLevel: 'fatal' })
 
 describe('pliers-modernizr', function () {
 
   beforeEach('create temp directory', function (done) {
     rmdir(tempDir, function () {
-      mkdir(tempDir, function() {
+      mkdir(tempDir, function () {
         done()
       })
     })
@@ -23,7 +23,7 @@ describe('pliers-modernizr', function () {
   })
 
   it('should error with no pliers argument supplied', function (done) {
-    assert.throws(function() {
+    assert.throws(function () {
       buildModernizr()
     }, /No pliers argument supplied./)
     done()
@@ -31,7 +31,7 @@ describe('pliers-modernizr', function () {
 
   it('should error with no directory path argument supplied', function (done) {
     var pliers = createPliers()
-    assert.throws(function() {
+    assert.throws(function () {
       pliers('buildSprite', buildModernizr(pliers))
     }, /No directory path argument supplied./)
     done()
@@ -92,6 +92,29 @@ describe('pliers-modernizr', function () {
     pliers('buildModernizr', buildModernizr(pliers, destDir, 'fake/config/path'))
     pliers.run('buildModernizr', function (error) {
       assert.equal(error.message, 'Modernizr config file not found.')
+      done()
+    })
+
+  })
+
+  it('should error if compiled file could not be written', function (done) {
+
+    var pliers = createPliers()
+      , destDir = join(tempDir, 'js')
+      , mockFs = { writeFile: writeFile, readFile: fs.readFile }
+      , destroy = buildModernizr.__set__('fs', mockFs)
+
+    function writeFile (filename, data, options, callback) {
+      return callback(new Error('Compiled Modernizr file could not be written.'))
+    }
+
+    fs.writeFileSync(join(tempDir, 'modernizr.json'), '{ "feature-detects": [ "test/svg" ] }')
+    fs.mkdirSync(destDir)
+
+    pliers('buildModernizr', buildModernizr(pliers, destDir))
+    pliers.run('buildModernizr', function (error) {
+      assert.equal(error.message, 'Compiled Modernizr file could not be written.')
+      destroy()
       done()
     })
 
